@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+from urllib.request import urlretrieve
+import tarfile
+import os
+import sys
+import argparse
+
+def parse_args():
+    """parse arguments to the script and return them
+    """
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('path', help="Directory for saving Enron dataset.")
+
+    args = parser.parse_args()
+    return args
+
+args = parse_args()
+
+enron_download_uri = "https://www.cs.cmu.edu/~enron/enron_mail_20150507.tar.gz"
+enron_save_dir = args.path
+enron_save_path = os.path.join(enron_save_dir, "enron.tar.gz")
+
+def reporthook(blocknum, blocksize, totalsize):
+    readsofar = blocknum * blocksize
+    os.system('cls' if os.name == 'nt' else 'clear')
+    if totalsize > 0:
+        percent = readsofar * 1e2 / totalsize
+        s = "Downloading the Enron corpus: %5.1f%% %*d / %d" % (
+            percent, len(str(totalsize)), readsofar, totalsize)
+        print(s, file=sys.stderr)
+        if readsofar >= totalsize:
+            print("\n", file=sys.stderr)
+    else: 
+        print("Downloading the Enron corpus: read %d\n" % (readsofar,), file=sys.stderr)
+
+
+try:
+    print("Extracting...")
+    urlretrieve(enron_download_uri, enron_save_path, reporthook)
+    tar = tarfile.open(enron_save_path, "r:gz")
+    tar.extractall(enron_save_dir)
+    tar.close()
+finally:
+    os.remove(enron_save_path)
