@@ -3,6 +3,8 @@ from .ContactList import ContactList
 from typing import List, Tuple
 from email import parser
 from email import policy
+import time
+from email.utils import parsedate
 
 
 class EmailMessage:
@@ -20,8 +22,8 @@ class EmailMessage:
     :vartype subject: str
     :ivar email_id: Globally unique internet-message-id
     :vartype email_id: str
-    :ivar email_date: Value of the date field of the email
-    :vartype email_date: str
+    :ivar email_date: Seconds since epoch when the email was sent
+    :vartype email_date: int
     :ivar plaintext: Email body as plain text
     :vartype plaintext: str
     """
@@ -73,11 +75,23 @@ class EmailMessage:
         res.email_from = res.email_from[0]
         
         res.subject = msg_object["Subject"]
-        res.email_date = msg_object["Date"]
+        res.email_date = EmailMessage.email_date_to_timestamp(msg_object["Date"])
         res.email_id = msg_object["Message-ID"]
         res.plaintext = msg_object.get_body()
                 
         return res
+
+
+    @staticmethod
+    def email_date_to_timestamp(datefield):
+        """
+        
+        :param str datefield: The 'date' field of the email message
+        :returns: Seconds since epoch corresponding to the date
+        :rtype: int
+        """
+        return int(time.mktime(parsedate(datefield)))
+        
     
     @staticmethod
     def parse_address_parts(field_values):
