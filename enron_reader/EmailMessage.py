@@ -8,7 +8,7 @@ from email.utils import parsedate
 
 
 class EmailMessage:
-    """Represents an email message. TODO parse date
+    """Represents an email message.
 
     :ivar email_from: (email_address, display_name) of the sender of the email
     :vartype email_from: tuple[str, str]
@@ -71,11 +71,11 @@ class EmailMessage:
         
         tos, ccs, bccs, froms = [msg_object.get_all(x, []) for x in ['to', 'cc', 'bcc', 'from']]
 
-        res.email_from, res.email_to, res.email_cc, res.email_bcc = [EmailMessage.parse_address_parts(x) for x in  [froms, tos, ccs, bccs]]
+        res.email_from, res.email_to, res.email_cc, res.email_bcc = [EmailMessage.__parse_address_parts(x) for x in  [froms, tos, ccs, bccs]]
         res.email_from = res.email_from[0]
         
         res.subject = msg_object["Subject"]
-        res.email_date = EmailMessage.email_date_to_timestamp(msg_object["Date"])
+        res.email_date = EmailMessage.__email_date_to_timestamp(msg_object["Date"])
         res.email_id = msg_object["Message-ID"]
         res.plaintext = msg_object.get_body()
                 
@@ -83,7 +83,7 @@ class EmailMessage:
 
 
     @staticmethod
-    def email_date_to_timestamp(datefield):
+    def __email_date_to_timestamp(datefield):
         """
         
         :param str datefield: The 'date' field of the email message
@@ -94,7 +94,7 @@ class EmailMessage:
         
     
     @staticmethod
-    def parse_address_parts(field_values):
+    def __parse_address_parts(field_values):
         """
 
         :param list[str] field_values: list of values of an email address field (like 'to', 'from', ...)
