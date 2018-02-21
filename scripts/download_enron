@@ -35,10 +35,10 @@ def reporthook(blocknum, blocksize, totalsize):
     else: 
         print("Downloading the Enron corpus: read %d\n" % (readsofar,), file=sys.stderr)
 
+urlretrieve(enron_download_uri, enron_save_path, reporthook)
 
 try:
     print("Extracting...")
-    urlretrieve(enron_download_uri, enron_save_path, reporthook)
     tar = tarfile.open(enron_save_path, "r:gz")
     tar.extractall(enron_save_dir)
     tar.close()
