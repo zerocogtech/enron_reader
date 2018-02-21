@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name='enron_reader',
-      version='0.2',
+      version='0.21',
       description='This package makes reading emails from Enron dataset easy.',
       url='http://github.com/sparik/enron_reader',
       author='Sparik Hayrapetyan',

@@ -1,4 +1,4 @@
 from .Mailbox import Mailbox
 from .EnronReader import EnronReader
 
-__version__ = "0.2"
+__version__ = "0.21"
