@@ -32,9 +32,10 @@ class EmailFolder:
     def read_from_path(self, path, contact_list, max_depth, cur_depth = 0):
         """Reads the mailbox folder's contents (messages and subfolders), and add emails' contacts to contact_list
 
-        :param str path: path of the folder
-        :param ContactList contact_list: a ContactList container for the folder's messages' contacts.
-        :param int cur_depth: depth of the folder (distance from the root folder). Default is 0.
+        :param str path: Path of the folder
+        :param ContactList contact_list: A ContactList container for the folder's messages' contacts.
+        :param int max_depth: Maximum depth of read subfolders.
+        :param int cur_depth: Depth of the folder (distance from the root folder). Default is 0.
         """
 
         contents = os.listdir(path)
@@ -47,6 +48,9 @@ class EmailFolder:
                 subfolder.read_from_path(item_path, contact_list, max_depth, cur_depth + 1)
                 self.__add_subfolder(subfolder)
             else:
-                message = EmailMessage.message_from_eml(item_path)
-                self.__add_message(message)
-                message.add_recipients_to_contact_list(contact_list)
+                try:
+                    message = EmailMessage.message_from_eml(item_path)
+                    self.__add_message(message)
+                    message.add_recipients_to_contact_list(contact_list)
+                except:
+                    pass

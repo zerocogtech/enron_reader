@@ -29,7 +29,19 @@ class ContactList:
     def get_contacts(self):
         """
 
-        :returns: the contact objects in this ContactList as a list
+        :returns: the contact objects in this contact list as a list
         :rtype: List[Contact]
         """
         return list(self.contacts.values())
+
+    def get_contact_by_address(self, address):
+        """
+        
+        :param str address: An email address
+        :returns: The :class:`Contact` object associated with the given address, or None if address is not in this contact list.
+        :rtype: Contact
+        """
+        if address not in self.contacts:
+            return None
+
+        return self.contacts[address]

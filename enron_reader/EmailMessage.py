@@ -77,7 +77,7 @@ class EmailMessage:
         res.subject = msg_object["Subject"]
         res.email_date = EmailMessage.__email_date_to_timestamp(msg_object["Date"])
         res.email_id = msg_object["Message-ID"]
-        res.plaintext = msg_object.get_body()
+        res.plaintext = EmailMessage.__find_plaintext(msg_object)
                 
         return res
 
@@ -91,6 +91,25 @@ class EmailMessage:
         :rtype: int
         """
         return int(time.mktime(parsedate(datefield)))
+
+    @staticmethod
+    def __find_plaintext(msg):
+        """Extracts and returns email content in plain text
+
+        :param msg: An :class:`email.message.EmailMessage` object
+        :type msg: :class:`email.message.EmailMessage`
+        :returns: The content of msg in plain text
+        :rtype: str
+        """
+        if msg.get_content_type() == "text/plain":
+            return msg.get_content()
+        
+        for part in msg.iter_parts():
+            cur = find_plaintext(part)
+            if cur is not None:
+                return cur
+            
+        return None
         
     
     @staticmethod

@@ -32,17 +32,18 @@ class EnronReader:
 		self.user_ids = set([user_id for user_id in items if user_id in self.user_ids])
 
 
-	def get_mailbox_for_user(self, user_id, max_depth = 1):
+	def get_mailbox_for_user(self, user_id, max_depth = None):
 		"""Constructs and returns a `enron_reader.Mailbox` object for the specified user_id.
 
 		:param str user_id: id of an enron user
-		:param int max_depth: maximum depth of the folder structure. If max_depth=None, then no maximum depth. Default is max_depth=1, corresponding to flat structure
-		:returns: a Mailbox object for the enron user with id user_id, with maximum depth max_depth
+		:param int max_depth: maximum depth of the folder structure. Default is None, meaning no maximum depth.
+		:returns: A Mailbox object for the enron user with id user_id, with maximum depth max_depth
 		:rtype: Mailbox
 		:raises ValueError: If max_depth is negative
+		:raises ValueError: If user_id is not found in the list of users.
 		"""
 		if user_id not in self.user_ids:
-			raise Exception("Invalid user id")
+			raise ValueError("Invalid user id")
 
 		if user_id in self.user_id_to_mailbox and self.user_id_to_mailbox[user_id].max_depth == max_depth:
 			return self.user_id_to_mailbox[user_id]
